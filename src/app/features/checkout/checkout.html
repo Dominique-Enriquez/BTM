@@ -1,0 +1,216 @@
+<header class="page-hero">
+  <span class="eyebrow">Secure-looking, honestly demo</span>
+  <h1>Checkout</h1>
+  <p>Delivery and payment selection in one clear flow</p>
+</header>
+@if (cart.items().length) {
+  <section class="checkout-page container">
+    <form class="checkout-main" [formGroup]="form" (ngSubmit)="placeOrder()" novalidate>
+      <section class="panel" appReveal>
+        <div class="panel-title">
+          <b>01</b>
+          <div>
+            <h2>Customer information</h2>
+            <p>Tell us where this demo order would go.</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field wide">
+            <label for="fullName">Full name *</label
+            ><input id="fullName" formControlName="fullName" autocomplete="name" />
+            @if (submitted() && form.controls.fullName.invalid) {
+              <span class="error">Full name is required.</span>
+            }
+          </div>
+          <div class="form-field">
+            <label for="email">Email address *</label
+            ><input id="email" type="email" formControlName="email" autocomplete="email" />
+          </div>
+          <div class="form-field">
+            <label for="mobile">Mobile number *</label
+            ><input
+              id="mobile"
+              formControlName="mobile"
+              placeholder="09XXXXXXXXX"
+              autocomplete="tel"
+            />
+          </div>
+          <div class="form-field wide">
+            <label for="street">House number / Street *</label
+            ><input id="street" formControlName="street" autocomplete="street-address" />
+          </div>
+          <div class="form-field">
+            <label for="barangay">Barangay *</label
+            ><input id="barangay" formControlName="barangay" />
+          </div>
+          <div class="form-field">
+            <label for="city">City / Municipality *</label
+            ><input id="city" formControlName="city" autocomplete="address-level2" />
+          </div>
+          <div class="form-field">
+            <label for="province">Province *</label
+            ><input id="province" formControlName="province" autocomplete="address-level1" />
+          </div>
+          <div class="form-field">
+            <label for="zip">ZIP code *</label
+            ><input id="zip" inputmode="numeric" formControlName="zip" autocomplete="postal-code" />
+          </div>
+          <div class="form-field wide">
+            <label for="instructions">Additional delivery instructions</label
+            ><textarea id="instructions" rows="3" formControlName="instructions"></textarea>
+          </div>
+        </div>
+        @if (submitted() && form.invalid) {
+          <p class="error summary-error">
+            Please complete all required fields with a valid email, Philippine mobile number, and
+            4-digit ZIP code.
+          </p>
+        }
+      </section>
+      <section class="panel" appReveal>
+        <div class="panel-title">
+          <b>02</b>
+          <div>
+            <h2>Delivery</h2>
+            <p>Configurable demo estimates; arrival times are not guaranteed.</p>
+          </div>
+        </div>
+        <div class="choice-grid">
+          <label [class.selected]="delivery() === 'standard'"
+            ><input
+              type="radio"
+              name="delivery"
+              [checked]="delivery() === 'standard'"
+              (change)="delivery.set('standard')"
+            /><span><b>Standard delivery</b><small>Estimated 2–3 days</small></span
+            ><strong>₱80</strong></label
+          ><label [class.selected]="delivery() === 'express'"
+            ><input
+              type="radio"
+              name="delivery"
+              [checked]="delivery() === 'express'"
+              (change)="delivery.set('express')"
+            /><span><b>Express delivery</b><small>Estimated 1 day</small></span
+            ><strong>₱150</strong></label
+          >
+        </div>
+      </section>
+      <section class="panel" appReveal>
+        <div class="panel-title">
+          <b>03</b>
+          <div>
+            <h2>Payment method</h2>
+            <p>Select a simulated option. No payment is actually processed.</p>
+          </div>
+        </div>
+        <div class="payments">
+          @for (
+            item of [
+              { id: 'cod', name: 'Cash on Delivery', icon: '₱' },
+              { id: 'gcash', name: 'GCash', icon: 'G' },
+              { id: 'maya', name: 'Maya', icon: 'M' },
+              { id: 'card', name: 'Credit / Debit', icon: '▣' },
+            ];
+            track item.id
+          ) {
+            <button
+              type="button"
+              [class.selected]="payment() === item.id"
+              (click)="choosePayment($any(item.id))"
+            >
+              <span>{{ item.icon }}</span
+              ><b>{{ item.name }}</b
+              ><i>{{ payment() === item.id ? '●' : '○' }}</i>
+            </button>
+          }
+        </div>
+        @if (submitted() && !payment()) {
+          <span class="error">Choose a payment method.</span>
+        }
+        @if (payment(); as method) {
+          <div class="payment-note">
+            @if (method === 'cod') {
+              Pay only upon delivery. This still records a demo order only.
+            } @else if (method === 'card') {
+              Demonstration option only. We never ask for or store card numbers or CVVs.
+            } @else {
+              A simulated {{ method === 'gcash' ? 'GCash' : 'Maya' }} handoff would appear here.
+              Never enter a PIN or OTP in this demo.
+            }
+          </div>
+        }
+      </section>
+      <button class="btn btn-primary place-mobile" type="submit" [disabled]="processing()">
+        {{ processing() ? 'Recording demo order…' : 'Place demo order' }}
+      </button>
+    </form>
+    <aside class="checkout-summary">
+      <span class="eyebrow">Your order</span>
+      <h2>Review your bag</h2>
+      <div class="order-items">
+        @for (item of cart.items(); track item.product.id) {
+          <div>
+            <span class="mini atlas" [style.background-position]="item.product.imagePosition"
+              ><i>{{ item.quantity }}</i></span
+            >
+            <p>
+              <b>{{ item.product.name }}</b
+              ><small>{{ item.product.unit }}</small>
+            </p>
+            <strong>{{
+              cart.price(item.product) * item.quantity | currency: 'PHP' : 'symbol-narrow' : '1.0-0'
+            }}</strong>
+          </div>
+        }
+      </div>
+      <div class="money">
+        <p>
+          <span>Subtotal</span
+          ><b>{{ cart.subtotal() | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+        </p>
+        <p>
+          <span>Delivery</span><b>{{ fee() | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+        </p>
+        <p class="grand">
+          <span>Total</span><b>{{ total() | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+        </p>
+      </div>
+      <button
+        class="btn btn-primary place-desktop"
+        type="button"
+        (click)="placeOrder()"
+        [disabled]="processing()"
+      >
+        {{ processing() ? 'Recording demo order…' : 'Place demo order →' }}</button
+      ><small>No real charge, inventory reservation, or delivery is created.</small>
+    </aside>
+  </section>
+} @else {
+  <section class="no-cart container">
+    <h1>Your cart is empty</h1>
+    <p>Add products before starting checkout.</p>
+    <a class="btn btn-primary" routerLink="/">Browse products</a>
+  </section>
+}
+@if (order(); as confirmed) {
+  <div class="confirm-backdrop">
+    <section role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+      <div class="success-mark">✓</div>
+      <span class="eyebrow">Demo order recorded</span>
+      <h2 id="confirmation-title">Thank you, {{ confirmed.customer.fullName }}!</h2>
+      <p>Your simulated order reference is</p>
+      <strong>{{ confirmed.reference }}</strong>
+      <div class="confirm-total">
+        <span>Demo total</span
+        ><b>{{ confirmed.total | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+      </div>
+      @if (confirmed.payment !== 'cod') {
+        <p class="warning">
+          No payment was charged. A secure provider and backend verification are required for real
+          online payments.
+        </p>
+      }
+      <a class="btn btn-primary" routerLink="/">Back to shop</a>
+    </section>
+  </div>
+}

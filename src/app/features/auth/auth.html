@@ -1,0 +1,122 @@
+<section class="auth-page">
+  <div class="story">
+    <div class="story-inner">
+      <span class="mark">BTM</span>
+      <p class="overline">The good stuff, closer</p>
+      <h1>Premium Cuts.<br />Exceptional Quality.<br /><em>Delivered Fresh.</em></h1>
+      <p>
+        Discover quality beef, pork, chicken, and frozen favorites, conveniently delivered to your
+        doorstep.
+      </p>
+      <div class="note">Frontend demo · No production authentication</div>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <div class="form-wrap">
+      @if (mode() === 'login') {
+        <span class="eyebrow">Welcome back</span>
+        <h2>Sign in to BTM</h2>
+        <p class="intro">Your cart stays right where you left it.</p>
+        <form [formGroup]="login" (ngSubmit)="submitLogin()" novalidate>
+          <div class="form-field">
+            <label for="email">Email address</label
+            ><input
+              id="email"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+            />
+            @if (submitted() && login.controls.email.invalid) {
+              <span class="error">Enter a valid email address.</span>
+            }
+          </div>
+          <div class="form-field password">
+            <label for="password">Password</label
+            ><input
+              id="password"
+              [type]="show() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="Your password"
+            /><button type="button" (click)="show.update((v) => !v)">
+              {{ show() ? 'Hide' : 'Show' }}
+            </button>
+            @if (submitted() && login.controls.password.invalid) {
+              <span class="error">Password is required.</span>
+            }
+          </div>
+          <div class="options">
+            <label><input type="checkbox" formControlName="remember" /> Remember me</label
+            ><button type="button" (click)="forgot()">Forgot password?</button>
+          </div>
+          <button class="btn btn-primary submit" type="submit">Sign in</button>
+        </form>
+        <p class="switch">
+          New to BTM? <button type="button" (click)="toggle()">Create an account</button>
+        </p>
+      } @else {
+        <span class="eyebrow">Join the table</span>
+        <h2>Create account</h2>
+        <p class="intro">A clearly labeled local demo session.</p>
+        <form [formGroup]="register" (ngSubmit)="submitRegister()" novalidate>
+          <div class="two">
+            <div class="form-field">
+              <label for="name">Full name</label
+              ><input id="name" formControlName="fullName" autocomplete="name" />
+            </div>
+            <div class="form-field">
+              <label for="mobile">Mobile number</label
+              ><input
+                id="mobile"
+                formControlName="mobile"
+                placeholder="09XXXXXXXXX"
+                autocomplete="tel"
+              />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="reg-email">Email address</label
+            ><input id="reg-email" type="email" formControlName="email" autocomplete="email" />
+          </div>
+          <div class="two">
+            <div class="form-field">
+              <label for="reg-password">Password</label
+              ><input
+                id="reg-password"
+                type="password"
+                formControlName="password"
+                autocomplete="new-password"
+              />
+            </div>
+            <div class="form-field">
+              <label for="confirm">Confirm password</label
+              ><input
+                id="confirm"
+                type="password"
+                formControlName="confirm"
+                autocomplete="new-password"
+              />
+            </div>
+          </div>
+          @if (submitted() && register.invalid) {
+            <span class="error"
+              >Complete all fields correctly. Password needs 8+ characters and mobile must be a
+              valid PH number.</span
+            >
+          }
+          @if (submitted() && register.value.password !== register.value.confirm) {
+            <span class="error">Passwords do not match.</span>
+          }
+          <label class="terms"
+            ><input type="checkbox" formControlName="terms" /> I agree to the demo terms and
+            understand this is not production authentication.</label
+          ><button class="btn btn-primary submit" type="submit">Create account</button>
+        </form>
+        <p class="switch">
+          Already have an account? <button type="button" (click)="toggle()">Sign in</button>
+        </p>
+      }
+    </div>
+  </div>
+</section>

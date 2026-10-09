@@ -1,0 +1,140 @@
+.auth-page {
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  min-height: 100svh;
+  background: #fff;
+}
+.story {
+  position: relative;
+  display: flex;
+  align-items: end;
+  padding: 9vw 7vw 6vw;
+  color: #fff;
+  background:
+    linear-gradient(#22090c22, #21090ce8),
+    url('/images/btm-hero.jpg') 60% center/cover;
+}
+.story-inner {
+  max-width: 700px;
+}
+.mark {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #9e2633;
+  font-weight: 800;
+}
+.overline {
+  margin-top: 60px;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+}
+.story h1 {
+  font-size: clamp(3rem, 5.5vw, 6.4rem);
+  margin: 16px 0;
+}
+.story h1 em {
+  color: #efb7ad;
+}
+.story-inner > p:not(.overline) {
+  max-width: 570px;
+  line-height: 1.7;
+  color: #e8d8da;
+}
+.note {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 9px 12px;
+  border: 1px solid #ffffff42;
+  border-radius: 99px;
+  font-size: 0.7rem;
+}
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 110px 7vw 60px;
+}
+.form-wrap {
+  width: min(500px, 100%);
+}
+.form-wrap h2 {
+  font-size: 2.8rem;
+  margin: 12px 0;
+}
+.intro {
+  color: #766c6d;
+  margin-bottom: 28px;
+}
+.form-wrap form {
+  display: grid;
+  gap: 17px;
+}
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.password {
+  position: relative;
+}
+.password button {
+  position: absolute;
+  right: 9px;
+  top: 35px;
+  border: 0;
+  background: none;
+  color: #9e2633;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.options {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+.options button,
+.switch button {
+  border: 0;
+  background: none;
+  color: #9e2633;
+  font-weight: 700;
+  cursor: pointer;
+}
+.submit {
+  width: 100%;
+}
+.switch {
+  text-align: center;
+  color: #766c6d;
+  font-size: 0.84rem;
+}
+.terms {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: #665d5f;
+}
+@media (max-width: 900px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+  .story {
+    min-height: 560px;
+    padding: 110px 30px 50px;
+  }
+  .auth-panel {
+    padding: 65px 24px;
+  }
+}
+@media (max-width: 520px) {
+  .two {
+    grid-template-columns: 1fr;
+  }
+  .story h1 {
+    font-size: 3.2rem;
+  }
+}

@@ -1,0 +1,70 @@
+<header class="page-hero">
+  <span class="eyebrow">Your selection</span>
+  <h1>Shopping bag</h1>
+  <p>{{ cart.itemCount() }} {{ cart.itemCount() === 1 ? 'item' : 'items' }} ready for checkout</p>
+</header>
+<section class="cart-page container">
+  @if (cart.items().length) {
+    <div class="items">
+      <div class="items-head">
+        <h2>Your items</h2>
+        <button type="button" (click)="clear()">Clear cart</button>
+      </div>
+      @for (item of cart.items(); track item.product.id) {
+        <article class="cart-card">
+          <div class="thumb atlas" [style.background-position]="item.product.imagePosition"></div>
+          <div class="detail">
+            <small>{{ item.product.category }}</small>
+            <h3>{{ item.product.name }}</h3>
+            <span>{{ item.product.unit }}</span>
+          </div>
+          <div class="unit">
+            {{ cart.price(item.product) | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}
+          </div>
+          <app-quantity-selector
+            [value]="item.quantity"
+            [max]="item.product.stock"
+            (valueChange)="cart.update(item.product.id, $event)"
+          /><strong>{{
+            cart.price(item.product) * item.quantity | currency: 'PHP' : 'symbol-narrow' : '1.0-0'
+          }}</strong
+          ><button
+            class="remove"
+            type="button"
+            (click)="remove(item.product.id, $event)"
+            [attr.aria-label]="'Remove ' + item.product.name"
+          >
+            ×
+          </button>
+        </article>
+      }
+      <a class="continue" routerLink="/">← Continue shopping</a>
+    </div>
+    <aside class="summary">
+      <span class="eyebrow">Order summary</span>
+      <h2>A meal worth making</h2>
+      <div>
+        <span>Subtotal</span
+        ><b>{{ cart.subtotal() | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+      </div>
+      <div>
+        <span>Standard delivery estimate</span
+        ><b>{{ delivery | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+      </div>
+      <div class="total">
+        <span>Estimated total</span
+        ><b>{{ cart.subtotal() + delivery | currency: 'PHP' : 'symbol-narrow' : '1.0-0' }}</b>
+      </div>
+      <p>Final delivery selection and total are confirmed at checkout.</p>
+      <a class="btn btn-primary" routerLink="/checkout">Proceed to checkout →</a
+      ><small>Demo checkout · No real payment is collected</small>
+    </aside>
+  } @else {
+    <div class="empty-cart">
+      <span class="bag">BTM</span>
+      <h1>Your bag is waiting</h1>
+      <p>Add quality cuts and freezer favorites from the shop.</p>
+      <a class="btn btn-primary" routerLink="/">Start shopping</a>
+    </div>
+  }
+</section>
